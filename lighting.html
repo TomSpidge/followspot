@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><script type='text/javascript'>
+  var canvas;
+  var context;
+  var canvasPos;
+  var mouseX = 0;
+  var mouseY = 0;
+  var rgb = [255, 255,255];
+  size = 50;
+window.addEventListener('load', function () {
+  // get the canvas element and its context
+  canvas = document.getElementById('lighting');
+  context = canvas.getContext('2d');
+  context.canvas.width  = window.innerWidth;
+  context.canvas.height = window.innerHeight;
+  
+  canvasPos = getPosition(canvas);
+ 
+  canvas.addEventListener("mousemove", setMousePosition, false);
+  window.addEventListener("keydown", handleKeypress);
+ 
+  update();
+}, false); // end window.onLoad
+
+  function setMousePosition(e) {
+    mouseX = e.clientX - canvasPos.x;
+    mouseY = e.clientY - canvasPos.y;
+  }
+  
+  function handleKeypress(e) {
+	switch(e.key) {
+	 case "r":
+		rgb[0] += 10;
+		if (rgb[0] > 255) { rgb[0] = 255; }
+		break;
+	 case "g":
+		rgb[1] += 10;
+		if (rgb[1] > 255) { rgb[1] = 255; }
+		break;
+	 case "b":
+		rgb[2] += 10;
+		if (rgb[2] > 255) { rgb[2] = 255; }
+		break;
+	 case "R":
+		rgb[0] -= 10;
+		if (rgb[0] < 0) { rgb[0] = 0; }
+		break;
+	 case "G":
+		rgb[1] -= 10;
+		if (rgb[1] < 0) { rgb[1] = 0; }
+		break;
+	 case "B":
+		rgb[2] -= 10;
+		if (rgb[2] < 0) { rgb[2] = 0; }
+		break;
+	 case "+":
+		size += 10;
+		if (size > 1024) { size = 1024; }
+		break;
+	 case "-":
+		size -= 10;
+		if (size < 0) { size = 0; }
+		break;
+	}
+  }
+  
+  function update() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.beginPath();
+  context.arc(mouseX, mouseY, size, 0, 6.283185307179586, true);
+  context.fillStyle = 'rgb(' + rgb.join(',') + ')';
+  context.fill();
+  
+  requestAnimationFrame(update);
+}
+
+function getPosition(el) {
+  var xPosition = 0;
+  var yPosition = 0;
+ 
+  while (el) {
+    xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+    yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
+    el = el.offsetParent;
+  }
+  return {
+    x: xPosition,
+    y: yPosition
+  };
+}       
+</script>
+<style>
+* {
+	background:#000000;
+}
+
+#lighting {
+		width:100%;
+		height:100%;
+		display: block;
+		scroll: hidden;
+}
+</style>
+</head><body encoding='utf8'>
+  <canvas id='lighting' width='100%' height='100%' style=''/>
+</body></html>
