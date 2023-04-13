@@ -16,6 +16,6 @@ This is a very simple javascript web page to cover the need. Load it up, set it 
 - **R, G** & **B** (so, shift+RGB) decreases the RGB values
 - **+** & **-** increase and decrease the size of the spot.
 
-##ToDo
+## ToDo
 - Add transparency adjustment for when they overlap.
 - Add ability to change shape (and draw the new shape, obviously)
