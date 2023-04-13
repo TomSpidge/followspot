@@ -19,3 +19,4 @@ This is a very simple javascript web page to cover the need. Load it up, set it 
 ## ToDo
 - Add transparency adjustment for when they overlap.
 - Add ability to change shape (and draw the new shape, obviously)
+- _maybe_ switch move to when mouse is over a shape and clicking?

@@ -81,8 +81,14 @@ window.addEventListener('load', function () {
   
   function handleKeypress(e) {
     if (!isNaN(e.key - parseFloat(e.key))) {
-      //this is a number, so switch activeSpot
+      //this is a number, so switch activeSpot. 
+      oldSpot = activeSpot;      
       activeSpot = parseInt(e.key);
+      if (! spots[activeSpot].visible) {
+        //If invisible, move it to the current location. Don't make it jump util user moves mouse if already visible.21
+        spots[activeSpot].x = spots[oldSpot].x
+        spots[activeSpot].y = spots[oldSpot].y
+      }
     } else {
       switch(e.key.toLowerCase()) {
         case "r":
