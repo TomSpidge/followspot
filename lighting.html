@@ -5,8 +5,60 @@
   var canvasPos;
   var mouseX = 0;
   var mouseY = 0;
-  var rgb = [255, 255,255];
-  size = 50;
+ 
+  class Spot {
+    constructor() {
+      this.visible = false;
+      this.shape = "c";
+      this.rgb = [255, 255,255];
+      this.size = 50;
+      this.x = 100;
+      this.y = 100;
+    }
+    
+    changeColour(colour) {
+      var change = 0;
+      if (colour == colour.toUpperCase()) {
+        change = -10;
+      } else {
+        change = 10;
+      }
+      switch(colour.toLowerCase()) {
+        case "r":
+          this.rgb[0] += change;
+          break;
+        case "g":
+          this.rgb[1] += change;
+          break;
+        case "b":
+          this.rgb[2] += change;
+          break;
+      }
+      rgb.every((element, index,arr) => {
+        if (element < 0) { element = 0; }
+        if (element > 255) { element = 255; }
+        return true;
+      })
+    }
+
+    get size() {
+      return this._size;
+    }
+    set size(value) {
+      if (value < 10) {
+        this._size = 10;
+      } else if (value > 1024) {
+        this._size = 1024
+      } else {
+        this._size = value;
+      }
+    }
+  }
+
+  var spots = new Array(10).fill(0).map(() => new Spot());
+  var activeSpot = 1;
+  spots[activeSpot].visible = true;
+
 window.addEventListener('load', function () {
   // get the canvas element and its context
   canvas = document.getElementById('lighting');
@@ -23,56 +75,50 @@ window.addEventListener('load', function () {
 }, false); // end window.onLoad
 
   function setMousePosition(e) {
-    mouseX = e.clientX - canvasPos.x;
-    mouseY = e.clientY - canvasPos.y;
+    spots[activeSpot].x = e.clientX - canvasPos.x;
+    spots[activeSpot].y = e.clientY - canvasPos.y;
   }
   
   function handleKeypress(e) {
-	switch(e.key) {
-	 case "r":
-		rgb[0] += 10;
-		if (rgb[0] > 255) { rgb[0] = 255; }
-		break;
-	 case "g":
-		rgb[1] += 10;
-		if (rgb[1] > 255) { rgb[1] = 255; }
-		break;
-	 case "b":
-		rgb[2] += 10;
-		if (rgb[2] > 255) { rgb[2] = 255; }
-		break;
-	 case "R":
-		rgb[0] -= 10;
-		if (rgb[0] < 0) { rgb[0] = 0; }
-		break;
-	 case "G":
-		rgb[1] -= 10;
-		if (rgb[1] < 0) { rgb[1] = 0; }
-		break;
-	 case "B":
-		rgb[2] -= 10;
-		if (rgb[2] < 0) { rgb[2] = 0; }
-		break;
-	 case "+":
-		size += 10;
-		if (size > 1024) { size = 1024; }
-		break;
-	 case "-":
-		size -= 10;
-		if (size < 0) { size = 0; }
-		break;
-	}
+    if (!isNaN(e.key - parseFloat(e.key))) {
+      //this is a number, so switch activeSpot
+      activeSpot = parseInt(e.key);
+    } else {
+      switch(e.key.toLowerCase()) {
+        case "r":
+        case "g":
+        case "b":
+          spots[activeSpot].changeColour(e.key);
+          break;
+
+        case "+":
+          spots[activeSpot].size = spots[activeSpot].size + 10;
+          break;
+        case "-":
+          spots[activeSpot].size = spots[activeSpot].size - 10;
+          break;
+        
+        case "v":
+          spots[activeSpot].visible = ! spots[activeSpot].visible;
+          break;
+      }
+    }
   }
   
   function update() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.beginPath();
-  context.arc(mouseX, mouseY, size, 0, 6.283185307179586, true);
-  context.fillStyle = 'rgb(' + rgb.join(',') + ')';
-  context.fill();
-  
-  requestAnimationFrame(update);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    spots.forEach(drawSpot);
+    requestAnimationFrame(update);
 }
+
+  function drawSpot(s) {
+    if (s.visible) {
+      context.beginPath();
+      context.arc(s.x, s.y, s.size, 0, 6.283185307179586, true);
+      context.fillStyle = 'rgb(' + s.rgb.join(',') + ')';
+      context.fill();
+    }
+  }
 
 function getPosition(el) {
   var xPosition = 0;
