@@ -2,7 +2,7 @@
 
 ## What is it?
 I had a couple of spare projectors at church and decided they if they were set up to cover the whole stage area would work quite nicely as a followspot, just by having a screen with white dots on it moving to cover the necessary area.
-I couldn't find anything to do this (though there's some nice effects software that doubles as a gobi).
+I couldn't find anything to do this (though there's some nice effects software that doubles as a gobo).
 
 This is a very simple javascript web page to cover the need. Load it up, set it to fullscreen and off you go.
 
